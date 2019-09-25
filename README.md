@@ -37,6 +37,10 @@ If there is no more words to write, this section can be deleted.
 
 ## Install
 
+```sh
+yarn add @xrr2016/json-editor
+```
+
 [⬆ Back to Top](#table-of-contents)
 
 ## Contributing
