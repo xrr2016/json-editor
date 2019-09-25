@@ -6,8 +6,70 @@
       :data="tree"
       :indent="10"
       :expand-on-click-node="false"
-      :render-content="renderContent"
-    />
+    >
+      <el-row class="flex" :gutter="8" slot-scope="{ node, data }">
+        <el-col :span="5">
+          <el-input
+            placeholder="key"
+            v-model="data.key"
+            :disabled="node.parent.data.type === 'array' || data.isRoot"
+          ></el-input>
+        </el-col>
+        <el-col :span="5">
+          <el-select v-if="data.isRoot" v-model="data.type" @change="() => onChangeType(data)">
+            <el-option
+              v-for="type of ROOT_TYPES"
+              :key="type.value"
+              :label="type.label"
+              :value="type.value"
+            ></el-option>
+          </el-select>
+
+          <el-select v-else v-model="data.type" @change="() => onChangeType(data)">
+            <el-option
+              v-for="type of VALUE_TYPES"
+              :key="type.value"
+              :label="type.label"
+              :value="type.value"
+            ></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="11">
+          <el-input
+            type="text"
+            v-if="data.type === 'string'"
+            placeholder="value"
+            v-model="data.value"
+            @input="() => emitJson()"
+          ></el-input>
+
+          <el-input
+            v-else-if="data.type === 'number'"
+            type="number"
+            placeholder="value"
+            v-model="data.value"
+            @input="() => emitJson()"
+          ></el-input>
+
+          <el-select
+            v-else-if="data.type === 'boolean'"
+            v-model="data.value"
+            @change="() => emitJson()"
+          >
+            <el-option label="true" value="{true}"></el-option>
+            <el-option label="false" value="{false}"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="3">
+          <i
+            class="el-icon-plus"
+            v-if="data.type === 'object' || data.type === 'array'"
+            @click="() => append(data)"
+          />
+          <i v-if="!data.isRoot" class="el-icon-delete" @click="() => remove(node, data)" />
+        </el-col>
+      </el-row>
+    </el-tree>
   </section>
 </template>
 
@@ -20,6 +82,8 @@ export default {
   props: {},
   data() {
     return {
+      ROOT_TYPES,
+      VALUE_TYPES,
       tree: [
         {
           key: 'root',
@@ -80,91 +144,6 @@ export default {
 
       children.splice(index, 1)
       this.emitJson()
-    },
-    renderContent(h, {node, data, store}) {
-      const isRoot = data.isRoot
-      const parentType = node.parent.data.type
-
-      return (
-        <el-row class="flex" gutter={8}>
-          <el-col span={5}>
-            <el-input
-              placeholder="key"
-              v-model={data.key}
-              disabled={parentType === 'array' || isRoot}
-            ></el-input>
-          </el-col>
-          <el-col span={5}>
-            {isRoot ? (
-              <el-select
-                v-model={data.type}
-                on-change={() => this.onChangeType(data)}
-              >
-                {ROOT_TYPES.map(type => (
-                  <el-option
-                    key={type.value}
-                    label={type.label}
-                    value={type.value}
-                  ></el-option>
-                ))}
-              </el-select>
-            ) : (
-              <el-select
-                v-model={data.type}
-                on-change={() => this.onChangeType(data)}
-              >
-                {VALUE_TYPES.map(type => (
-                  <el-option
-                    key={type.value}
-                    label={type.label}
-                    value={type.value}
-                  ></el-option>
-                ))}
-              </el-select>
-            )}
-          </el-col>
-          <el-col span={11}>
-            {data.type === 'string' && (
-              <el-input
-                type="text"
-                placeholder="value"
-                v-model={data.value}
-                on-input={() => this.emitJson()}
-              ></el-input>
-            )}
-            {data.type === 'number' && (
-              <el-input
-                type="number"
-                placeholder="value"
-                v-model={data.value}
-                on-input={() => this.emitJson()}
-              ></el-input>
-            )}
-            {data.type === 'boolean' && (
-              <el-select v-model={data.value} on-change={() => this.emitJson()}>
-                <el-option label="true" value={true}></el-option>
-                <el-option label="false" value={false}></el-option>
-              </el-select>
-            )}
-          </el-col>
-          <el-col span={3}>
-            {data.type === 'object' && (
-              <i class="el-icon-plus" on-click={() => this.append(data)} />
-            )}
-
-            {data.type === 'array' && (
-              <i class="el-icon-plus" on-click={() => this.append(data)} />
-            )}
-
-            {!isRoot && (
-              <i
-                class="el-icon-delete"
-                on-click={() => this.remove(node, data)}
-              />
-            )}
-          </el-col>
-        </el-row>
-      )
     }
   }
 }
