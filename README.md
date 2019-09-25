@@ -31,7 +31,9 @@ If there is no more words to write, this section can be deleted.
 
 ## Links
 
-- [docs](https://xrr2016.github.io/json-editor/)
+<!-- - [docs](https://xrr2016.github.io/json-editor/) -->
+
+- [docs](https://json-editor.netlify.com/)
 
 [⬆ Back to Top](#table-of-contents)
 
