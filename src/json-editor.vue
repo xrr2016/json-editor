@@ -1,11 +1,11 @@
 <template>
   <section class="json-editor">
     <el-tree
-      node-key="key"
-      default-expand-all
       :data="tree"
       :indent="10"
       :expand-on-click-node="false"
+      node-key="key"
+      default-expand-all
     >
       <el-row class="flex" :gutter="8" slot-scope="{ node, data }">
         <el-col :span="5">

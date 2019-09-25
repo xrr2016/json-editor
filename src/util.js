@@ -41,19 +41,19 @@ export function randomId() {
     .slice(-6)
 }
 
-function cloneNode(node) {
-  const data = node.type === 'array' ? [] : {}
+// function cloneNode(node) {
+//   const data = node.type === 'array' ? [] : {}
 
-  Object.entries(node)
-    .filter(item => {
-      return item[0] === 'key' || item[0] === 'value'
-    })
-    .forEach(item => {
-      const [key, val] = item
-      data[key] = val
-    })
+//   Object.entries(node)
+//     .filter(item => {
+//       return item[0] === 'key' || item[0] === 'value'
+//     })
+//     .forEach(item => {
+//       const [key, val] = item
+//       data[key] = val
+//     })
 
-  return data
-}
+//   return data
+// }
 
-export function cloneJson(root) {}
+// export function cloneJson(root) {}
